@@ -7,13 +7,14 @@
 //
 
 #import "PPSAppDelegate.h"
-
 #import "PPSViewController.h"
+#import "PPSAPI.h"
 
 @implementation PPSAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[PPSViewController alloc] initWithNibName:@"PPSViewController" bundle:nil];
@@ -21,6 +22,23 @@
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    if (!url) {  return NO; }
+    
+    NSString *URLString = [url absoluteString];
+    
+    NSLog(@"urlstring: %@", URLString);
+    
+    [PPSAPI fetchAccessTokenWithURL:url];
+    
+//    [[NSUserDefaults standardUserDefaults] setObject:URLString forKey:@"url"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+    return YES;
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

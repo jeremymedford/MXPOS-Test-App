@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PPSAPI.h"
 
-@interface PPSViewController : UIViewController
+@interface PPSViewController : UIViewController <PPSAPIDelegate>
+
+- (IBAction)authorize:(UIButton *)sender;
+- (IBAction)getMerchants:(id)sender;
 
 @end
