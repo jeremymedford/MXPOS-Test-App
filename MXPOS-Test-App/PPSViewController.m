@@ -46,7 +46,7 @@
     BOOL authorized = YES;
     
     if (authorized) {
-        [PPSCustomer findByValue:@"a" limit:@(10) offset:@(0) sortField:@"alias" ascending:YES completion:^(NSArray *customers) {
+        [PPSCustomer findByValue:@"Sean" limit:@(10) offset:@(0) sortField:@"alias" ascending:YES completion:^(NSArray *customers) {
             
             NSLog(@"customers: %@", customers);
         }];
