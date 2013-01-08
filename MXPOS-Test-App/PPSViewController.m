@@ -10,6 +10,8 @@
 #import "PPSAPI.h"
 #import "PPSMerchant.h"
 #import "PPSCustomer.h"
+#import "PPSAPINotifications.h"
+#import "PPSAPIError.h"
 
 @interface PPSViewController ()
 
@@ -20,8 +22,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFailure:) name:@"PPSRequestFailedNotification" object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFailure:) name:PPSAPI_SERVICE_COMMAND_ERROR object:nil];
     
 }
 
@@ -49,6 +51,9 @@
         [PPSCustomer findByValue:@"Sean" limit:@(10) offset:@(0) sortField:@"alias" ascending:YES completion:^(NSArray *customers) {
             
             NSLog(@"customers: %@", customers);
+        } failure:^(NSNumber *statusCode, NSError *error) {
+            
+            NSLog(@"Returned code: %@, error: %@", statusCode, error);
         }];
     }
 }
@@ -69,6 +74,7 @@
 - (void) handleFailure:(NSNotification *)note;
 {
     NSLog(@"failed in viewcontroller: %@", note);
+    
 }
 
 @end
