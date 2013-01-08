@@ -9,6 +9,7 @@
 #import "PPSViewController.h"
 #import "PPSAPI.h"
 #import "PPSMerchant.h"
+#import "PPSCustomer.h"
 
 @interface PPSViewController ()
 
@@ -20,8 +21,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-        
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFailure:) name:@"PPSRequestFailedNotification" object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,13 +41,14 @@
     NSLog(@"authorized.");
 }
 
-- (IBAction)getMerchants:(id)sender {
+- (IBAction)getCustomers:(id)sender {
     
     BOOL authorized = YES;
     
     if (authorized) {
-        [PPSMerchant findAllMerchantsWithCompletion:^(NSArray *payments) {
-            NSLog(@"Payments: %@", payments);
+        [PPSCustomer findByValue:@"a" limit:@(10) offset:@(0) sortField:@"alias" ascending:YES completion:^(NSArray *customers) {
+            
+            NSLog(@"customers: %@", customers);
         }];
     }
 }
@@ -62,6 +64,11 @@
     NSLog(@"authURL: %@", authURL);
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:authURL]];
+}
+
+- (void) handleFailure:(NSNotification *)note;
+{
+    NSLog(@"failed in viewcontroller: %@", note);
 }
 
 @end
