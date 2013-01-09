@@ -23,8 +23,9 @@
 {
     [super viewDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFailure:) name:PPSAPI_SERVICE_COMMAND_ERROR object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAPIRequestFailure:) name:PPSAPI_SERVICE_COMMAND_ERROR object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleOAuthRequestFailure:) name:PPSAPI_OAUTH_SERVICE_COMMAND_ERROR object:nil];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -38,9 +39,10 @@
     [PPSAPI setDelegate:self];
     
     [PPSAPI setCredentialsWithClientId:@"7D6C9315-B732-4D57-A259-380E5E80B110" sharedSecret:@"ghK6aeRG5I+TQiRsb52x/pCdnM0="];
+//    [PPSAPI setCredentialsWithClientId:@"7D6C9315-B732-4D57-A259-380E5E80B110" sharedSecret:@"unsafe_secret"];
+
     [PPSAPI temporaryAuthorizationWithCallbackURL:[NSURL URLWithString:@"myapp://oauth"]];
     
-    NSLog(@"authorized.");
 }
 
 - (IBAction)getCustomers:(id)sender {
@@ -71,10 +73,16 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:authURL]];
 }
 
-- (void) handleFailure:(NSNotification *)note;
+- (void) handleAPIRequestFailure:(NSNotification *)note;
 {
-    NSLog(@"failed in viewcontroller: %@", note);
+    NSLog(@"failed api request in viewcontroller: %@", note);
     
+}
+
+- (void) handleOAuthRequestFailure:(NSNotification *)note;
+{
+    NSLog(@"failed oauth step in viewcontroller:%@ object:%@", self, note.object);
+
 }
 
 @end
