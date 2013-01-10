@@ -9,6 +9,7 @@
 #import "PPSAppDelegate.h"
 #import "PPSViewController.h"
 #import "PPSAPI.h"
+#import "PPSOAuth1Token.h"
 
 @implementation PPSAppDelegate
 
@@ -32,7 +33,20 @@
     
     NSLog(@"urlstring: %@", URLString);
     
-    [PPSAPI fetchAccessTokenWithURL:url];
+    [PPSAPI fetchAccessTokenWithURL:url success:^(PPSOAuth1Token *accessToken) {
+     
+        NSLog(@"Back in Test App.");
+        NSLog(@"AccessToken:%@ secret:%@",accessToken.tokenId, accessToken.tokenSecret);
+        
+        [[NSUserDefaults standardUserDefaults] setObject:accessToken.tokenId forKey:@"accessToken"];
+        [[NSUserDefaults standardUserDefaults] setObject:accessToken.tokenSecret forKey:@"accessTokenSecret"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+    } failure:^(NSNumber *statusCode, NSError *error) {
+        
+        NSLog(@"Back in Test App.");
+        NSLog(@"Status Code:%@ Error:%@", statusCode, error);
+    }];
     
 //    [[NSUserDefaults standardUserDefaults] setObject:URLString forKey:@"url"];
 //    [[NSUserDefaults standardUserDefaults] synchronize];

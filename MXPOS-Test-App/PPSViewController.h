@@ -13,5 +13,6 @@
 
 - (IBAction)authorize:(UIButton *)sender;
 - (IBAction)getCustomers:(id)sender;
+- (IBAction)setCredentials:(UIButton *)sender;
 
 @end

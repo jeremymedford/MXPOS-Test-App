@@ -12,6 +12,7 @@
 #import "PPSCustomer.h"
 #import "PPSAPINotifications.h"
 #import "PPSAPIError.h"
+#import "PPSOAuth1Token.h"
 
 @interface PPSViewController ()
 
@@ -58,6 +59,16 @@
             NSLog(@"Returned code: %@, error: %@", statusCode, error);
         }];
     }
+}
+
+- (IBAction)setCredentials:(UIButton *)sender {
+    
+    NSString *tokenId = [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"];
+    NSString *secret = [[NSUserDefaults standardUserDefaults] objectForKey:@"accessTokenSecret"];
+    
+    PPSOAuth1Token *token = [[PPSOAuth1Token alloc] initWithTokenId:tokenId secret:secret];
+    [PPSAPI setTokenCredentialsWithAccessToken:token];
+    
 }
 
 #pragma mark PPSAPIDelegate methods
